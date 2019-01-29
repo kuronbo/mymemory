@@ -1,0 +1,110 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Mymemory{% endblock %}
+
+{% block metas %}
+    <link rel="icon" type="image/vnd.microsoft.icon" href="{{ url_for('.static', filename='favicon.ico') }}">
+{% endblock %}
+
+{% block content %}
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">MyMemory</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <form action="/search" class="ml-auto form-inline mt-2 mt-md-0">
+                        <input type="hidden" name="page" value="0">
+                        <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main role="main">
+        <div class="container mt-5 pt-3">
+            <h1 class="text-info">CheckIO</h1>
+            <form id="Form" action="/m_checkio/record" method="post">
+                <div class="form-inline form-group">
+                    <input id="tagName" class="form-control mr-sm-2" type="text" placeholder="タグを検索/選択/作成" aria-label="tagSelect">
+                    <p id="tagSelect" class="btn btn-outline-success my-2 my-sm-0">Select</p>
+                </div>
+                <div id="tagList" class="mb-3">
+                </div>
+                <div class="form-group">
+                    <label for="island_label">island</label>
+                    <input class="form-control" id="island_label" type="text" name="island">
+                </div>
+                <div class="form-group">
+                    <label for="title_label">問題タイトル</label>
+                    <input class="form-control" id="title_label" type="text" name="title">
+                </div>
+                <div class="form-group">
+                    <label for="level_label">Level</label>
+                    <div>
+                        <select class="form-control" id="level_label" name="level">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description_label">問題内容</label>
+                    <textarea class="form-control" id="description_label" rows="14" name="description"></textarea>
+                </div>
+                <div id="controllAnswer" class="justify-content-center">
+                    <h2 id="addAnswer" class="btn btn-secondary">+answer</h2>
+                    <h2 id="rmAnswer" class="btn btn-secondary">-answer</h2>
+                </div>
+                <button class="btn btn-secondary">登録</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet"
+          href="{{ url_for('.static', filename='style.css') }}">
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(function(){
+            $('#addAnswer').click(function (e) {
+                var data = `
+                <div class="answer_div border border-dark p-5 rounded mb-4">
+                    <h3>answer</h3>
+                    <div class="form-group">
+                        <label for="answer_who_label">who</label>
+                        <input class="form-control" id="answer_who_label" type="text" name="answer_who">
+                    </div>
+                    <div class="form-group">
+                        <label for="answer_sourcecode_label">ソースコード</label>
+                        <textarea class="form-control" id="answer_sourcecode_label" rows="14" name="answer_source_code"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="answer_impression_label">所感</label>
+                        <textarea class="form-control" id="answer_impression_label" rows="14" name="answer_impression"></textarea>
+                    </div>
+                </div>
+                `;
+                $('#controllAnswer').after(data)
+            });
+            $('#rmAnswer').click(function (e) {
+                $('#controllAnswer').next('.answer_div').remove()
+            });
+            $('#tagSelect').click(function (e) {
+                const tagname = $('#tagName').val();
+                $('#tagList').append('<span name="tag" class="badge badge-dark px-3 py-2 mx-2 mb-2" style="font-size: 16px;">'+tagname+'</span>');
+                $('#Form').append($('<input/>', {type: 'hidden', name: 'tag', value: tagname}));
+            })
+        });
+    </script>
+{% endblock %}

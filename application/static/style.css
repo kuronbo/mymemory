@@ -1,0 +1,12 @@
+.word_break {
+    word-break: break-all;
+}
+
+.text-size-middle {
+    font-size: 16px;
+}
+
+.nl2br p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
