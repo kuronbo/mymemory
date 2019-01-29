@@ -11,7 +11,7 @@ usage
 
     pip install memoplat
     pip install m_covers
-    pip install m_checkio
+    pip install checkio_taker
 
 
 2. 環境変数PYTHONPATHにmymemoryのpathを追加
